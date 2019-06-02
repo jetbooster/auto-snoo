@@ -4,6 +4,10 @@
 
 AutoSnoo is a generic, customisable reddit bot generator, written in Node.
 
+# Before you begin
+Reddit bots can be useful, but they can be very annoying if they are too active, or add little to a conversation. PLEASE read [The bottiquete](reddit.com/r/redditdev/comments/98vj9e/please_be_a_good_bot_citizen_of_reddit/) before deploying your bot, especially the sections about creating your own subreddit for testing.
+
+## Quick start
 ```javascript
 const AutoSnoo = require('auto-snoo');
 const configObject = {}; // See below
