@@ -44,7 +44,7 @@ class Listener {
    * @param {Snoowrap.Comment} comment
    */
   async shouldComment(comment) {
-    if (this.lastCommented && !(Date.now() > this.lastCommented + 1000 * 60 * this.cooldown)) {
+    if (this.lastCommented && !(Date.now() > (this.lastCommented + (1000 * 60 * this.cooldown)))) {
       // cooldown not over
       // perform cooldown check first as it requires no querying of the comment content
       if (this.debug) {
