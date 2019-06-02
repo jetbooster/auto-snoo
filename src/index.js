@@ -36,6 +36,7 @@ class AutoSnoo {
         name,
         initTime: this.initTime,
         botUsername: this.snoowrapOpts.username,
+        debug: this.debug,
         ...listenerOpts,
       }),
     );

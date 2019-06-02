@@ -47,17 +47,32 @@ class Listener {
     if (this.lastCommented && !(Date.now() > this.lastCommented + 1000 * 60 * this.cooldown)) {
       // cooldown not over
       // perform cooldown check first as it requires no querying of the comment content
+      if (this.debug) {
+        // eslint-disable-next-line max-len
+        console.log(`Not commenting because still on cooldown. Now: ${Date.now()}, lastCommented+cooldown: ${this.lastCommented + 1000 * 60 * this.cooldown}`);
+      }
       return false;
     }
     if ((await comment.created_utc) * 1000 < this.initTime) {
       // comment was made before this instance of bot came online. Ignore to avoid double replying older messages
+      if (this.debug) {
+        console.log('Not commenting because Comment was in the past');
+      }
       return false;
     }
-    if ((await comment.author.name) === this.botUsername) {
+    const authorName = await comment.author.name;
+    if (authorName === this.botUsername) {
       // Do not reply to comments made by the bot, to avoid potential for infinite loops
+      if (this.debug) {
+        console.log('Not commenting because would be reply to self');
+      }
       return false;
     }
-    if (!containsTriggerWord(comment, this.triggerPhrase, this.triggerCaseSensitive)) {
+    const triggerHit = await containsTriggerWord(comment, this.triggerPhrase, this.triggerCaseSensitive);
+    if (!triggerHit) {
+      if (this.debug) {
+        console.log('Not commenting because no trigger word');
+      }
       return false;
     }
 
@@ -66,10 +81,10 @@ class Listener {
       const results = await Promise.all(this.customPredicates.map(predicate => predicate(comment)));
       if (this.debug) {
         // TODO add some sort of logger
+        console.log(`Reached custom predicates. Result: ${JSON.stringify(results)}`);
       }
       return results.every(result => result);
     }
-
     return true;
   }
 
@@ -96,12 +111,15 @@ class Listener {
     }
     const fullComment = `${this.header}${commentBody}${this.footer}`;
     if (this.debug) {
-      // TODO: add some form of logging
+      console.log(`Generated reply comment: body: ${commentBody}`);
     }
     return fullComment;
   }
 
   async run(comment) {
+    if (this.debug) {
+      console.log(`Running listener: ${this.name}`);
+    }
     if (await this.shouldComment(comment)) {
       try {
         console.log(`Attempting to respond to a trigger for Listener:${this.name}`);
