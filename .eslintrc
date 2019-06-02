@@ -1,0 +1,11 @@
+{
+  "extends": "airbnb",
+  "plugins": ["jest", "mocha"],
+  "env": {
+      "jest": true
+  },
+  "rules": {
+      "max-len": ["error", { "comments": 180, "code": 120 }],
+      "no-console":"off"
+  }
+}

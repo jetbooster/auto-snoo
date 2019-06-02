@@ -1,0 +1,6 @@
+.env
+.eslintrc
+.gitignore
+test.js
+coverage
+test
