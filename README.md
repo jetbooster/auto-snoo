@@ -1,5 +1,7 @@
 # AutoSnoo
 
+>Pull Requests / Issues Welcome! Especially if you think there are any Listener types you think I should add!
+
 AutoSnoo is a generic, customisable reddit bot generator, written in Node.
 
 ```javascript
