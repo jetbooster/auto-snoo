@@ -1,6 +1,6 @@
 {
   "name": "auto-snoo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Generic, customisable reddit bot generator",
   "main": "src/index.js",
   "scripts": {
