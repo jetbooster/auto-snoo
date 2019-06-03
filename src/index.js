@@ -82,6 +82,7 @@ let instance;
  * @param {String} options.snoowrapOpts.clientSecret
  * @param {String} options.snoowrapOpts.username
  * @param {String} options.snoowrapOpts.password
+ * @param {String} options.snoowrapOpts.userAgent
  * @param {Object} options.listeners See Readme for format
  * @returns {AutoSnoo} instance
  */
