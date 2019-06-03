@@ -39,7 +39,7 @@ NOTE: using this option frequently will very quickly cause your bot to bump up a
     password '', // Password for the above username 
   }
   subreddits: '' || [], // string or array of strings representing the subreddits the bot will listen on
-  debug: false, // boolean indicating debug mode is on !!! TODO! Currently does nothing
+  debug: false, // boolean indicating debug mode is on
   listeners: {
     // Object containing any number of listeners for your bot to pick up on
     // The keys will be used as a name in debug logging for indicating which listener triggered.
