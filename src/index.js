@@ -16,6 +16,7 @@ class AutoSnoo {
    * @param {String} options.snoowrapOpts.clientSecret
    * @param {String} options.snoowrapOpts.username
    * @param {String} options.snoowrapOpts.password
+   * @param {String} options.snoowrapOpts.userAgent
    * @param {Object} options.listeners See Readme for format
    */
   constructor(options) {
@@ -28,7 +29,7 @@ class AutoSnoo {
       throw Error('AutoSnoo requires snoowrapOpts containing clientId, secretId, and the reddit bot\'s username and password');
     }
     this.snoowrapOpts = options.snoowrapOpts;
-    this.snoowrapOpts.userAgent = `Auto-snoo/${version} (Node ${process.version})`;
+    this.snoowrapOpts.userAgent = options.snoowrapOpts.userAgent || `Auto-snoo/${version} (Node ${process.version})`;
     this.client = new Snoowrap(this.snoowrapOpts);
 
     this.listeners = Object.entries(options.listeners).map(
@@ -81,6 +82,7 @@ let instance;
  * @param {String} options.snoowrapOpts.clientSecret
  * @param {String} options.snoowrapOpts.username
  * @param {String} options.snoowrapOpts.password
+ * @param {String} options.snoowrapOpts.userAgent
  * @param {Object} options.listeners See Readme for format
  * @returns {AutoSnoo} instance
  */

@@ -37,6 +37,7 @@ NOTE: using this option frequently will very quickly cause your bot to bump up a
     clientSecret: '', // The clientSecret from reddit.com/prefs/apps
     username: '', // The username the bot will use
     password '', // Password for the above username 
+    userAgent '', // (Optional) User-Agent the bot will use. See Reddit API rules for examples: https://github.com/reddit-archive/reddit/wiki/api#rules
   }
   subreddits: '' || [], // string or array of strings representing the subreddits the bot will listen on
   debug: false, // boolean indicating debug mode is on
