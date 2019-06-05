@@ -88,7 +88,7 @@ describe('Listener', () => {
         debug: false,
         triggerPhrase: 'test',
         corpus: [],
-      })).toThrow(Error('Listener must know username of bot to prevent replying to itself'));
+      })).toThrow(Error('Listener:listenerName - Listeners must know username of bot to prevent replying to itself'));
     });
     it('when no triggerphrase provided', () => {
       expect(() => new Listener({
@@ -97,7 +97,8 @@ describe('Listener', () => {
         botUsername: 'mockBot',
         debug: false,
         corpus: [],
-      })).toThrow(Error('Listeners require a provided trigger phrase or array of triggerphrases'));
+        // eslint-disable-next-line max-len
+      })).toThrow(Error('Listener:listenerName - Listeners require a provided trigger phrase or array of triggerphrases'));
     });
     it('when no corpus provided (random)', () => {
       expect(() => new Listener({
@@ -106,7 +107,7 @@ describe('Listener', () => {
         botUsername: 'mockBot',
         debug: false,
         triggerPhrase: 'test',
-      })).toThrow(Error('Random and sequential Listeners require a provided corpus attribute'));
+      })).toThrow(Error('Listener:listenerName - Random and sequential Listeners require a provided corpus attribute'));
     });
     it('when no corpus provided (sequential)', () => {
       expect(() => new Listener({
@@ -116,7 +117,7 @@ describe('Listener', () => {
         debug: false,
         triggerPhrase: 'test',
         responseType: 'sequential',
-      })).toThrow(Error('Random and sequential Listeners require a provided corpus attribute'));
+      })).toThrow(Error('Listener:listenerName - Random and sequential Listeners require a provided corpus attribute'));
     });
     it('when no function provided (function)', () => {
       expect(() => new Listener({
@@ -126,7 +127,7 @@ describe('Listener', () => {
         debug: false,
         triggerPhrase: 'test',
         responseType: 'function',
-      })).toThrow(Error('Function Listeners require a provided function attribute'));
+      })).toThrow(Error('Listener:listenerName - Function Listeners require a provided function attribute'));
     });
     it('when unrecognised responseType', () => {
       expect(() => new Listener({
@@ -136,7 +137,7 @@ describe('Listener', () => {
         debug: false,
         triggerPhrase: 'test',
         responseType: 'blah',
-      })).toThrow(Error('Invalid responseType: options are random, sequential, or function'));
+      })).toThrow(Error('Listener:listenerName - Invalid responseType: options are random, sequential, or function'));
     });
   });
 

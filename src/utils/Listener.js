@@ -13,7 +13,7 @@ class Listener {
     this.responseType = options.responseType || 'random';
 
     // eslint-disable-next-line max-len
-    if (!options.botUsername) throw Error(`Listener:${this.name} - Listener must know username of bot to prevent replying to itself`);
+    if (!options.botUsername) throw Error(`Listener:${this.name} - Listeners must know username of bot to prevent replying to itself`);
     this.botUsername = options.botUsername;
 
     this.lastCommented = null;
