@@ -4,7 +4,7 @@
   "description": "A Generic, customisable reddit bot generator",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage .*\\\\.test\\\\.js"
   },
   "repository": {
     "type": "git",
