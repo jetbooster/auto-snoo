@@ -1,6 +1,8 @@
 .env
 .eslintrc
 .gitignore
+.travisyml
+
 test.js
+
 coverage
-test
