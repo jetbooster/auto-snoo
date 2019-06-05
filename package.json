@@ -4,8 +4,7 @@
   "description": "A Generic, customisable reddit bot generator",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest --coverage .*\\\\.test\\\\.js",
-    "test:ci": "jest .*\\\\.test\\\\.js --coverage --coverageReporters=text-lcov | coveralls"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -41,9 +40,24 @@
     "mocha-lcov-reporter": "^1.3.0"
   },
   "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom":[
+      "src/**/*.js"
+    ],
     "coverageReporters": [
       "text-summary",
-      "html"
+      "html",
+      "lcov"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80
+      }
+    },
+    "testMatch": [ 
+      "**/*.test.js"
     ]
   }
 }
