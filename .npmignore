@@ -3,6 +3,8 @@
 .gitignore
 .travisyml
 
+**/*.test.js
+
 test.js
 
 coverage
