@@ -61,7 +61,12 @@ class AutoSnoo {
 
     commentStream.on('item', async (comment) => {
       this.listeners.forEach((listener) => {
-        listener.run(comment);
+        try {
+          listener.run(comment);
+        } catch (e) {
+          // TODO: add granular error handling - specifically for eating snoowrap timeout errors
+          console.log(`Error occurred with listener: ${e.message}`);
+        }
       });
     });
 
