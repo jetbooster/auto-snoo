@@ -27,7 +27,7 @@ const getCommentChain = async (r, comment, array = []) => {
   const basicComment = await {
     id: await comment.id,
     parent_id: await comment.parent_id,
-    author: await comment.author.name,
+    author: await (await comment.author).name,
     body: await comment.body,
   };
 
@@ -51,7 +51,7 @@ const containsTriggerWord = async (comment, trigger, caseSensitive) => {
       }
       return commentBody.toLowerCase().includes(value.toLowerCase());
     });
-  } else if (typeof trigger === 'string' || trigger instanceof String) {
+  } else if (typeof trigger === 'string') {
     if (caseSensitive) {
       containsAnyTriggers = commentBody.includes(trigger);
     } else {

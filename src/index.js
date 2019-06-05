@@ -24,7 +24,12 @@ class AutoSnoo {
     this.debug = options.debug || false;
     this.subreddits = options.subreddits;
 
-    if (!options.snoowrapOpts) {
+    if (!options.snoowrapOpts
+        || !options.snoowrapOpts.clientId
+        || !options.snoowrapOpts.clientSecret
+        || !options.snoowrapOpts.username
+        || !options.snoowrapOpts.password
+    ) {
       // eslint-disable-next-line max-len
       throw Error('AutoSnoo requires snoowrapOpts containing clientId, secretId, and the reddit bot\'s username and password');
     }
@@ -47,7 +52,7 @@ class AutoSnoo {
     let multireddit;
     if (this.subreddits instanceof Array) {
       multireddit = this.subreddits.join('+');
-    } else if (typeof this.subreddits === 'string' || this.subreddits instanceof String) {
+    } else if (typeof this.subreddits === 'string') {
       multireddit = this.subreddits;
     } else {
       throw Error('options.subreddits should be String or Array of strings');
@@ -56,9 +61,16 @@ class AutoSnoo {
 
     commentStream.on('item', async (comment) => {
       this.listeners.forEach((listener) => {
-        listener.run(comment);
+        try {
+          listener.run(comment);
+        } catch (e) {
+          // TODO: add granular error handling - specifically for eating snoowrap timeout errors
+          console.log(`Error occurred with listener: ${e.message}`);
+        }
       });
     });
+
+    return commentStream;
   }
 
   async getParentComment(comment) {
