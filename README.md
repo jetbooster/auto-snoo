@@ -1,5 +1,7 @@
 # AutoSnoo
 
+[![Build Status](https://travis-ci.org/jetbooster/auto-snoo.svg?branch=master)](https://travis-ci.org/jetbooster/auto-snoo) [![Coverage Status](https://coveralls.io/repos/github/jetbooster/auto-snoo/badge.svg?branch=issue/AS-3-add-tests)](https://coveralls.io/github/jetbooster/auto-snoo)
+
 >Pull Requests / Issues Welcome! Especially if you think there are any Listener types you think I should add!
 
 AutoSnoo is a generic, customisable reddit bot generator, written in Node.
