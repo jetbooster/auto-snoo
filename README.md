@@ -81,11 +81,12 @@ NOTE: using this option frequently will very quickly cause your bot to bump up a
       cooldown: 10 
 
       /* phrase or phrases bot is listening for. For array, any matches is considered a match.
+       * Accepts a string, regex or array of either
        * HIGHLY RECCOMENDED: Make the value(s) relatively unique. using /u/{botName} is a good option, then
        *   the bot will only appear when summoned. Using something like 'the' is a great way to get your bot 
        *   banned very rapidly.
        */
-      triggerPhrase: '' || [] 
+      triggerPhrase: '' || [] || /^.$/ // 
       triggerCaseSensitive: false // should the capitalisation of the trigger word match? defaults to false
 
       /* Custom functions that allow for more nuanced tests for when the bot should reply

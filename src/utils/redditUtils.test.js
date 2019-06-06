@@ -100,7 +100,7 @@ describe('Reddit Utils', () => {
   });
 
   describe('containsTriggerWord', () => {
-    it('runs with case sensitivity off', async () => {
+    it('passes with case sensitivity off', async () => {
       const result = await utils.containsTriggerWord(
         mockComment(undefined, undefined, 'somewhere inside I contain the triGgerWord', undefined),
         'triggerword',
@@ -130,7 +130,7 @@ describe('Reddit Utils', () => {
       );
       expect(result).toEqual(false);
     });
-    it('runs with caseSensitivity', async () => {
+    it('passes with caseSensitivity', async () => {
       const result = await utils.containsTriggerWord(
         mockComment(undefined, undefined, 'somewhere inside I contain the TriggerWord', undefined),
         'TriggerWord',
@@ -138,7 +138,7 @@ describe('Reddit Utils', () => {
       );
       expect(result).toEqual(true);
     });
-    it('runs with an array', async () => {
+    it('passes with an array', async () => {
       const result = await utils.containsTriggerWord(
         mockComment(undefined, undefined, 'somewhere inside I contain the trigger word', undefined),
         ['triggerword', 'none', 'inside'],
@@ -153,6 +153,50 @@ describe('Reddit Utils', () => {
       );
       expect(result).toEqual(true);
     });
+    it('passes with a regex triggerphrase', async () => {
+      const result = await utils.containsTriggerWord(
+        mockComment(undefined, undefined, 'somewhere inside I contain the tRiGGer word', undefined),
+        /\strigger\s/,
+      );
+      expect(result).toEqual(true);
+    });
+    it('fails with a regex triggerphrase with caseSensitivity', async () => {
+      const result = await utils.containsTriggerWord(
+        mockComment(undefined, undefined, 'somewhere inside I contain the trIgGer word', undefined),
+        /\strigger\s/,
+        true,
+      );
+      expect(result).toEqual(false);
+    });
+    it('fails with a regex triggerphrase with caseSensitivity in the trigger', async () => {
+      const result = await utils.containsTriggerWord(
+        mockComment(undefined, undefined, 'somewhere inside I contain the trigger word', undefined),
+        /.*TriGger.*/,
+        true,
+      );
+      expect(result).toEqual(false);
+    });
+    it('passes with a array regex triggerphrase and handles linebreaks', async () => {
+      const result = await utils.containsTriggerWord(
+        mockComment(undefined, undefined, 'somewhere\ninside\nI contain the tRiGGer word', undefined),
+        [
+          /\strIgGer\s/,
+          /I\scoNtaIn/,
+        ],
+      );
+      expect(result).toEqual(true);
+    });
+    it('fail with a caseSensitive array regex triggerphrase', async () => {
+      const result = await utils.containsTriggerWord(
+        mockComment(undefined, undefined, 'somewhere inside I contain the tRiGGer word', undefined),
+        [
+          /\strIgGer\s/,
+          /I\scoNtaIn/i,
+        ],
+        true,
+      );
+      expect(result).toEqual(false);
+    });
     it('fails with wrong type', async () => {
       let error;
       try {
@@ -164,7 +208,7 @@ describe('Reddit Utils', () => {
       } catch (e) {
         error = e;
       }
-      expect(error).toEqual(Error('Trigger Phrase must be string or array of strings'));
+      expect(error).toEqual(Error('Trigger Phrase must be string or regex, or an array of the former'));
     });
   });
 });

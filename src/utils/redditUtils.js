@@ -40,12 +40,33 @@ const getCommentChain = async (r, comment, array = []) => {
   return array;
 };
 
+/**
+ * RegExp does not support modifying flags of existing RegExp objects, so rebuild with ignore case if required
+ * @param {RegExp} regex
+ */
+const recompileRegex = (regex, caseSensitive) => {
+  if (regex.ignoreCase === !caseSensitive) {
+    // regex already matches required caseSensitivity
+    return regex;
+  }
+  if (!caseSensitive) {
+    // Add ignore flag and return
+    return new RegExp(regex.source, `${regex.flags}i`);
+  }
+  // Strip ignoreCase flag
+  return new RegExp(regex.source, regex.flags.replace('i', ''));
+};
+
 const containsTriggerWord = async (comment, trigger, caseSensitive) => {
   const commentBody = await comment.body;
   let containsAnyTriggers = false;
   if (trigger instanceof Array) {
     // match on any of the trigger phrases in the array
     containsAnyTriggers = trigger.some((value) => {
+      if (value instanceof RegExp) {
+        const regex = recompileRegex(value, caseSensitive);
+        return regex.test(commentBody);
+      }
       if (caseSensitive) {
         return commentBody.includes(value);
       }
@@ -57,8 +78,11 @@ const containsTriggerWord = async (comment, trigger, caseSensitive) => {
     } else {
       containsAnyTriggers = commentBody.toLowerCase().includes(trigger.toLowerCase());
     }
+  } else if (trigger instanceof RegExp) {
+    const regex = recompileRegex(trigger, caseSensitive);
+    containsAnyTriggers = regex.test(commentBody);
   } else {
-    throw Error('Trigger Phrase must be string or array of strings');
+    throw Error('Trigger Phrase must be string or regex, or an array of the former');
   }
   return containsAnyTriggers;
 };
