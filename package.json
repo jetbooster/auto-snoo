@@ -4,7 +4,8 @@
   "description": "A Generic, customisable reddit bot generator",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "bump": "npm version patch -m 'Bumping package version to %s'"
   },
   "repository": {
     "type": "git",
