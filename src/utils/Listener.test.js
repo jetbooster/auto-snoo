@@ -262,6 +262,128 @@ describe('Listener', () => {
       const result = await listener.shouldComment(mockComment());
       expect(result).toEqual(true);
     });
+
+    // Appease the branch coverage gods by repeating all tests with debug off
+    it('returns true when all default predicates met', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+      });
+      utils.containsTriggerWord.mockImplementationOnce(() => true);
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(true);
+    });
+
+    it('returns false when has already commented less than cooldown minutes ago', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        cooldown: 2,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+      });
+      listener.lastCommented = Date.now() - (1000 * 60);
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(false);
+    });
+
+    it('ignores cooldown if cooldown=0', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        cooldown: 0,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+      });
+      listener.lastCommented = Date.now();
+      utils.containsTriggerWord.mockImplementationOnce(() => true);
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(true);
+    });
+
+    it('returns false when comment was in the past', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() + (1000 * 60),
+        debug: false,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+      });
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(false);
+    });
+
+    it('returns false when comment was by the bot', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        botUsername: 'myName',
+        triggerPhrase: 'test',
+        corpus: [],
+      });
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(false);
+    });
+
+    it('returns false when comment did not contain trigger phrase', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+      });
+      utils.containsTriggerWord.mockImplementationOnce(() => false);
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(false);
+    });
+
+    it('returns false when at least one custom predicate fails', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+        customPredicates: [
+          async () => true,
+          async () => false,
+        ],
+      });
+      utils.containsTriggerWord.mockImplementationOnce(() => true);
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(false);
+    });
+
+    it('returns true when all custom predicates pass', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+        customPredicates: [
+          async () => true,
+          async () => true,
+        ],
+      });
+      utils.containsTriggerWord.mockImplementationOnce(() => true);
+      const result = await listener.shouldComment(mockComment());
+      expect(result).toEqual(true);
+    });
   });
 
   describe('generateReply', () => {
@@ -269,7 +391,7 @@ describe('Listener', () => {
       const listener = new Listener({
         name: 'listenerName',
         initTime: Date.now() - (1000 * 60), // simulate started one minute ago
-        debug: true,
+        debug: false,
         botUsername: 'mockBot',
         header: 'random:',
         triggerPhrase: 'test',
@@ -342,6 +464,22 @@ describe('Listener', () => {
       listener.generateReply = async () => 'reply';
       await listener.run(comment);
       expect(comment.reply).toHaveBeenCalledWith('reply');
+    });
+    it('does nothing on shouldComment=false', async () => {
+      const listener = new Listener({
+        name: 'listenerName',
+        initTime: Date.now() - (1000 * 60), // simulate started one minute ago
+        debug: false,
+        botUsername: 'mockBot',
+        triggerPhrase: 'test',
+        corpus: [],
+      });
+      const comment = {
+        reply: jest.fn(),
+      };
+      listener.shouldComment = async () => false;
+      await listener.run(comment);
+      expect(comment.reply).not.toHaveBeenCalled();
     });
   });
 });

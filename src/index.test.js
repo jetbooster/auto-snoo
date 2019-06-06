@@ -82,6 +82,43 @@ describe('Index', () => {
     expect(getCommentChainSpy).toHaveBeenCalledWith({ comment: 'object' });
   });
 
+  it('Catches listener Errors', () => {
+    const instance = index.create({
+      snoowrapOpts: {
+        clientId: 'abc',
+        clientSecret: 'def',
+        username: 'mockBot',
+        password: 'hunter2',
+        mock: 'options',
+      },
+      subreddits: ['a', 'b'],
+      listeners: {
+        example: {
+          additional: 'listener',
+          options: {
+            etc: 'etc',
+          },
+        },
+      },
+    });
+
+    // CommentStream expectations
+    const commentStream = instance.listen();
+    expect(Snoostorm.CommentStream).toHaveBeenCalledWith(expect.any(Snoowrap), { subreddit: 'a+b' });
+
+    expect(commentStream.on).toHaveBeenCalled();
+    const dotOnCalledWith = commentStream.on.mock.calls[0];
+    expect(dotOnCalledWith).toEqual(['item', expect.any(Function)]);
+
+    const funcCalledOnEmit = dotOnCalledWith[1];
+    const listenerRunFn = Listener.mock.instances[0].run;
+    listenerRunFn.mockImplementationOnce(() => { throw Error('Bang!'); });
+    jest.spyOn(console, 'log');
+    funcCalledOnEmit({ comment: 'object' });
+    expect(listenerRunFn).toHaveBeenCalledWith({ comment: 'object' });
+    expect(console.log).toHaveBeenCalledWith('Error occurred with listener: Bang!');
+  });
+
   it('works with a single subreddit', async () => {
     const instance = index.create({
       snoowrapOpts: {
