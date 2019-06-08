@@ -2,6 +2,13 @@
 
 [![Build Status](https://travis-ci.org/jetbooster/auto-snoo.svg?branch=master)](https://travis-ci.org/jetbooster/auto-snoo) [![Coverage Status](https://coveralls.io/repos/github/jetbooster/auto-snoo/badge.svg?branch=master)](https://coveralls.io/github/jetbooster/auto-snoo)
 
+```
+Changelog
+ - 1.1.0
+   * Convert Module to typescript
+   * Config change: Function Listener now requires a function named 'func' rather than 'function'
+```
+
 >Pull Requests / Issues Welcome! Especially if you think there are any Listener types you think I should add!
 
 AutoSnoo is a generic, customisable reddit bot generator, written in Node.
