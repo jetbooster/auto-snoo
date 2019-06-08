@@ -2,3 +2,5 @@ node_modules
 coverage
 test.js
 .env
+
+dist

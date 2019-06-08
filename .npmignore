@@ -3,6 +3,10 @@
 .gitignore
 .travis.yml
 
+src
+
+tsconfig.json
+
 **/*.test.js
 
 test.js
