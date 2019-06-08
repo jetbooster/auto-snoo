@@ -1,11 +1,29 @@
 {
-  "extends": "airbnb",
-  "plugins": ["jest", "mocha"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "mocha",
+    "jest"
+  ],
   "env": {
-      "jest": true
+    "jest": true,
+    "es6": true,
+    "node": true
   },
   "rules": {
-      "max-len": ["error", { "comments": 180, "code": 120 }],
-      "no-console":"off"
+    "max-len": [
+      "error",
+      {
+        "comments": 180,
+        "code": 120
+      }
+    ],
+    "no-console": 0,
+    "@typescript-eslint/indent": 0
   }
 }
