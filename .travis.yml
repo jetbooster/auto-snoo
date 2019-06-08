@@ -7,6 +7,9 @@ jobs:
     node_js: node
     script: jest && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
       && rm -rf ./coverage
+  - stage: Transpile typescript
+    node_js: node
+    script: rm -rf dist; tsc
 deploy:
   provider: npm
   email: 'jarvisam@gmail.com'
